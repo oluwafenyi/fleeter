@@ -1,0 +1,30 @@
+version: "3.2"
+services:
+  database:
+    image: postgres:alpine
+    environment:
+      - "POSTGRES_PASSWORD=password"
+      - "POSTGRES_DB=fleeterdb"
+    volumes:
+      - fleeter_localdb:/var/lib/postgresql
+  api:
+    depends_on:
+      - database
+    build:
+      dockerfile: dev.Dockerfile
+      context: .
+    env_file:
+      - .env
+    environment:
+      - "DJANGO_SETTINGS_MODULE=config.settings.compose"
+      - "DATABASE_NAME=fleeterdb"
+      - "DATABASE_USER=postgres"
+      - "DATABASE_PASSWORD=password"
+      - "DATABASE_HOST=database"
+      - "DATABASE_PORT=5432"
+    volumes:
+      - ./:/usr/app/
+    ports:
+      - "8000:8000"
+volumes:
+  fleeter_localdb:
