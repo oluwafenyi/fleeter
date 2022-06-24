@@ -62,6 +62,16 @@ class AccountsViewsTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(user_1.follows(user_2))
 
+    def test_user_cannot_follow_self(self):
+        user_1 = User.objects.create(username="first_user", email="user1@domain.com")
+        self.client.force_authenticate(user_1)
+        data = {
+            "target_user_id": user_1.id
+        }
+        response = self.client.post(reverse("accounts-following", kwargs={"pk": user_1.id}), data=data)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertFalse(user_1.follows(user_1))
+
     def test_user_follow_forbidden(self):
         user_1 = User.objects.create(username="first_user", email="user1@domain.com")
         user_2 = User.objects.create(username="second_user", email="user2@domain.com")

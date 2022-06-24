@@ -7,6 +7,8 @@ services:
       - "POSTGRES_DB=fleeterdb"
     volumes:
       - fleeter_localdb:/var/lib/postgresql
+  redis:
+    image: redis:alpine
   api:
     depends_on:
       - database
@@ -22,6 +24,7 @@ services:
       - "DATABASE_PASSWORD=password"
       - "DATABASE_HOST=database"
       - "DATABASE_PORT=5432"
+      - "REDIS_URL=redis://redis:6379/0"
     volumes:
       - ./:/usr/app/
     ports:

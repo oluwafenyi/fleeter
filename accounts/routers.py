@@ -4,4 +4,4 @@ from .viewsets import AccountsViewSet
 
 
 router = CoreRouter()
-router.register("accounts", AccountsViewSet, basename="accounts")
+router.register("account", AccountsViewSet, basename="accounts")
