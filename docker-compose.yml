@@ -12,6 +12,7 @@ services:
   api:
     depends_on:
       - database
+      - redis
     build:
       dockerfile: dev.Dockerfile
       context: .
